@@ -20,14 +20,13 @@ class Monster():
     def init2(self):
         pass
     
-    #def kill(self):
-     #   del Monster.zoo[self.number]    
+       
         
         
 class Waechter(Monster):
     
     def init2(self):
-        self.hp = 30
+        self.hp = 25
         self.char = "W"
         self.attack = 5
         self.defense = 3
@@ -35,7 +34,7 @@ class Waechter(Monster):
 class Boss(Monster):
     
     def init2(self):
-        self.hp = 90
+        self.hp = 35
         self.char = "B"
         self.attack = 7
         self.defense = 5
@@ -45,14 +44,14 @@ class Player(Monster):
     def init2(self):
         self.hp = 100
         self.char = "@"
-        self.attack = 8
+        self.attack = 13
         self.defense = 5
         
         
 class Kobolt(Monster):
     
     def init2(self):
-        self.hp = 30
+        self.hp = 10
         self.char = "K" 
         self.attack = 3
         self.defense = 3 
@@ -60,37 +59,37 @@ class Kobolt(Monster):
 class Hunter(Monster):
     
     def init2(self):
-        self.hp = 40
+        self.hp = 20
         self.char = "H"
         self.attack = 6
         self.defense = 3              
         
 def fight(attacker, defender):
-    print("----- kampfrunde beginnt ------")
+    print("----- fight starts ------")
     action(attacker, defender)
     # wenn defender noch lebt
     if defender.hp > 0:
-        print("---- Gegenschlag----")
+        print("----counterstrike ----")
         action(defender, attacker)
-    print("----- kampfrunde endet ------")
+    print("----- fight ends ------")
     
 def action(attacker, defender):
-    print("{} attackiert {}".format(attacker.char, defender.char))
+    print("{} attacks {}".format(attacker.char, defender.char))
     wa = random.randint(1,6)
     wd = random.randint(1,6)
-    print("würfelglück: (angreifer, verteidiger):", wa, wd)
-    print("werte: (angreifer attack, vert. def):", attacker.attack, defender.defense)
+    print("luck: (attacker, defender):", wa, wd)
+    print("values: (attacker attack, vert. def):", attacker.attack, defender.defense)
     print("{} HP: {} {} HP: {}".format(attacker.char,attacker.hp, defender.char, defender.hp))
     if wa + attacker.attack > wd + defender.defense:
-        print("attacke war erfolgreich")
+        print("attack was sucesfull")
         schaden = random.randint(1,6)
-        print("schaden:", schaden)
+        print("damage:", schaden)
         defender.hp -= schaden
         if defender.hp <= 0:
             print("Kill!!!")
     else:
-        print("attacke wurde abgewehrt")
-    print("angriff vorbei!")    
+        print("attack was defended")
+    print("attack is over!")    
     print("{} HP: {} {} HP: {}".format(attacker.char,attacker.hp, defender.char, defender.hp))
         
 
@@ -102,9 +101,35 @@ def randomTeleport(radius = 4):
             return hx+dx,hy+dy
           
 
-            
+helptext = """
+legend:
+@ .... this is you, the player
+# .... this is a dungeon wall
+. .... this is an empty space in the dungeon
+W .... this is an normal enemy
+B .... this is an boss enemy
+H .... this is an hunter enemy
+K .... this is an cobolt enemy
+T .... is a trap
+> .... this is a ladder to go down
+< .... this is a ladder to go up
+b .... this is a burger
+p .... this is a pizza
+d .... this is a door
+k .... this is a key
+$ .... this is gold
+X and Y .... are teleporters
+V and v .... are random teleporters
 
-# hx += random.randint(-5,5)
+commands:
+w, a, s, d .............move
+down, > .......... climb down
+up, < .............. climb up
+help, ? ... display this text
+quit, exit .... exit the game 
+            
+"""
+
 
 
 level0 = """
@@ -113,11 +138,11 @@ level0 = """
 #......b.......b.............p.............#
 ####.....T....W..................b..####...#
 #$$#...b..T....................b....d.$#...#
-#TT###..$......b....................####...#
+#TT###..$......b...........$........####...#
 #W.X.#......p..................T...........#
 #WWT##p..K.............V...........b..######
 #.WT...#####....H...............K.....T.$..#
-#...b.B...$.##....#................T..######
+#...b.B...$.##....#......$.........T..######
 #.....#######...W....#.T...b$#...b.......B.#
 #........p....b.....v..T######...###########
 ####...#bb#.....b...#####.......p#bb$bb$$.Y#
@@ -201,7 +226,7 @@ hz = Monster.zoo[0].z
 gold = 0
 hunger = 50
 hp = 100
-schluessel = 0
+keys = 0
 randomX = random.randint(2,30)
 randomY = random.randint(2,10)
 randomZ = random.randint(0,1)
@@ -219,15 +244,13 @@ while Monster.zoo[0].hp > 0:
             for mo in Monster.zoo:
                 if Monster.zoo[mo].z == z and Monster.zoo[mo].y == y and Monster.zoo[mo].x == x and Monster.zoo[mo].hp > 0:
                     sign = Monster.zoo[mo].char
-            #if y == hy and x == hx:
-            #    print(hero, end="")
-            #else:
+            
             print(sign, end="")
         print()
     hx = Monster.zoo[0].x
     hy = Monster.zoo[0].y
     hz = Monster.zoo[0].z
-    command = input("x: {} y:{} z:{}  Treppe runter = down/> Treppe hoch = up/< \ngold: {} hunger: {} leben: {} schlüssel: {} \n  Was nun?>>>".format(hx, hy, hz, gold, hunger, Monster.zoo[0].hp, schluessel))
+    command = input("x: {} y:{} z:{} help or ? to get help  \ngold: {} hunger: {} health: {} keys: {} \n  What do you want to do?>>>".format(hx, hy, hz, gold, hunger, Monster.zoo[0].hp, keys))
     dx = 0
     dy = 0
     if command == "a":
@@ -238,6 +261,11 @@ while Monster.zoo[0].hp > 0:
         dy = -1
     if command == "s":
         dy = 1
+    if command == "help" or command == "?":
+        print(helptext)
+        input("press enter to continue....")
+    if command == "quit" or command == "exit":
+        break        
         
          
     # ---- illegal move -----
@@ -245,57 +273,34 @@ while Monster.zoo[0].hp > 0:
     # -------- up / down ----------
     if command == "down" or command == ">":
         if target_location == ">":
-            print("du steigst tiefer in den dungeon hinab")
+            print("You go deeper in the dungeon")
             hz += 1
             Monster.zoo[0].z += 1
         else:
-            print("du musst erst eine Leiter finden (>)")
+            print("you have to find a ladder (>)")
     if command == "up" or command == "<":
         if target_location == "<": 
-            print("du steigst höher in den dungeon hinauf")
+            print("You go up in the dungeon")
             hz -= 1
             Monster.zoo[0].z -= 1
         else:
-            print("du musst erst eine Leiter finden (<)")    
+            print("You have to find a ladder (<)")    
         
     
     if target_location == "#":
-        print("Du kannst nicht weiter gehen wegen einer Wand!")
+        print("you can’t walk there because of the wall")
         dx = 0
         dy = 0
     if target_location == "d":
-        if schluessel < 1:
-            print("Du kommst nicht durch die Tür du musst den Schlüssel finden!")
+        if keys < 1:
+            print("Before you can open the door you must find a key")
             dx = 0
             dy = 0
         else:
-            print("Du öffnest die Tür mit deinem Schlüssel")
-            schluessel -= 1
+            print("You open the door with the key")
+            keys -= 1
             dungeon[hz][hy + dy][hx + dx] = "."
-    #if target_location == "W":
-    #    print("Du kämpfst gegen einen Wächter!") 
-    #    hp -= 10
-    #    # loss/ win?
-    #    if random.random() < 0.5:
-    #        print("Du hast den Kampf gewonnen")
-    #        dungeon[hz][hy+dy][hx+dx] = "."
-    #    else:
-    #        print("Du hast den Kampf verloren")  
-    #    dx = 0
-    #    dy = 0
-        
-    #if target_location == "B":
-    #    print("Du kämpst gegen einen Boss-Wächter!")   
-    #    hp -= 20
-    #    # loss/ win?
-    #    if random.random() < 0.4:
-    #        print("Du hast den Kampf gewonnen")
-    #        dungeon[hz][hy+dy][hx+dx] = "."
-    #    else:
-    #        print("Du hast den Kampf verloren")  
-    #    dx = 0
-    #    dy = 0
-                                                    
+                                             
     # ----- kampf ? --------------
     # alle monster durchiterieren (stück für stück abarbeiten)
     # und schauen ob spieler in ein anderes monster reinläuft
@@ -329,55 +334,54 @@ while Monster.zoo[0].hp > 0:
     # -----foodclock----
     hunger+=1
     if hunger > 100 and random.random() < 0.2:
-        print("Hunger schwächt dich")
+        print("You get damage because of hunger")
         hp -= 1
         #------health+---
     if hunger < 10 and hp < 100 and random.random() > 0.1:
-        print("Du heilst ein HP")
+        print("you heal one HP")
         hp += 1
     # --- pick up tile ----
     if dungeon[hz][hy][hx]=="$":  # == --> Vergleich
-        print("Du hast Gold gefunden")
+        print("You have find gold")
         gold += random.randint(1,6)
         dungeon[hz][hy][hx]="."   # =  --> Zuweisung 
     if dungeon[hz][hy][hx]=="b":
-        print("Du hast einen Burger gegessen!")
+        print("You eat a burger")
         hunger -= random.randint(1,20) 
         dungeon[hz][hy][hx]="."
     if dungeon[hz][hy][hx]=="p":
-        print("Du hast eine Pizza gegessen!")
+        print("You eat a pizza")
         hunger -= random.randint(1, 13)
         dungeon[hz][hy][hx]="."
     if dungeon[hz][hy][hx]=="T":
-        print("Du bist in eine Falle gelaufen!")
+        print("You walked into a trap")
         Monster.zoo[0].hp -= random.randint(1,50)
         dungeon[hz][hy][hx]="." 
     if dungeon[hz][hy][hx]=="k":
-       print("Du hast einen Schlüssel gefunden")
-       schluessel += 1
+       print("You have found a key")
+       keys += 1
        dungeon[hz][hy][hx]="."
     if dungeon[hz][hy][hx] == "X":
-        print("Du bist auf einen Teleporter gelaufen!")
+        print("You walked into a teleporter")
         hx = 41
         hy = 13
     if dungeon[hz][hy][hx] == "Y": 
-        print("Du bist auf einen Teleporter gelaufen!")
+        print("You walked into a teleporter")
         hx = 2
         hy = 7 
     if dungeon[hz][hy][hx] == "V":
-        print("Du bist auf einen Zufalls-Teleporter gelaufen")  
-        #hx += random.randint(-5,5) 
-        #hy += random.randint(-4,4)  
+        print("You walked into a random teleporter")  
+        
         hx,hy = randomTeleport(7)
         
     if dungeon[hz][hy][hx] == "v":
-        print("Du bist auf einen Mini-Zufalls-Teleporter gelaufen")
+        print("You walked into a mini-random teleporter")
         hx,hy = randomTeleport()  
     if dungeon[hz][hy][hx] == "A" and hx != "#" and hy != "#":
 		
-	    print("Du hast eine Aufgabe gefunden! Gehe zu x: {} y: {} und z: {}".format(randomX, randomY, randomZ))
+	    print("You have a new quest! Go to x: {} y: {} und z: {}".format(randomX, randomY, randomZ))
     if hx == randomX and hy == randomY and hz == randomZ:
-            print("Du hast die Aufgabe geschafft! Du bekommst eine Belohnung!")
+            print("You finished the quest! You get gold food and health")
             gold += 10
             hp += 30
             hunger -= 50
@@ -387,11 +391,7 @@ while Monster.zoo[0].hp > 0:
              
  
         
-    #if dungeon[hy][hx] == "W" and random.random() < 0.4:
-    #    print("Du hast den Kampf gewonnen!") 
-    #    dungeon[hy][hx] = "."
-    #elif dungeon[hy][hx] == "W"and random.random() > 0.4:
-    #    print("Du hast den Kampf verloren!")         
+           
             
             
             
