@@ -23,7 +23,7 @@ class Monster():
        
         
         
-class Waechter(Monster):
+class Guardian(Monster):
     
     def init2(self):
         self.hp = 25
@@ -106,7 +106,7 @@ legend:
 @ .... this is you, the player
 # .... this is a dungeon wall
 . .... this is an empty space in the dungeon
-W .... this is an normal enemy
+W .... this is a guardian
 B .... this is an boss enemy
 H .... this is an hunter enemy
 K .... this is an cobolt enemy
@@ -127,8 +127,21 @@ down, > .......... climb down
 up, < .............. climb up
 help, ? ... display this text
 quit, exit .... exit the game 
+pause ... stop the game
             
 """
+
+pausetext = """
+...................................
+...................................
+...................................
+..............PAUSE................
+...................................
+...................................
+...................................
+"""
+
+
 
 
 
@@ -205,7 +218,7 @@ for z, rawstring in enumerate(levels):
                 Player(x,y,z)
             elif char =="W":
                 l.append(".")
-                Waechter(x,y,z)
+                Guardian(x,y,z)
             elif char == "B":
                 l.append(".")
                 Boss(x,y,z)
@@ -265,7 +278,10 @@ while Monster.zoo[0].hp > 0:
         print(helptext)
         input("press enter to continue....")
     if command == "quit" or command == "exit":
-        break        
+        break 
+    if command == "pause":
+        print(pausetext)
+        input("press enter to continue...")          
         
          
     # ---- illegal move -----
