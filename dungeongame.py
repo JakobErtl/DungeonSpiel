@@ -110,7 +110,7 @@ W .... this is a guardian
 B .... this is an boss enemy
 H .... this is an hunter enemy
 K .... this is an cobolt enemy
-T .... is a trap
+T .... this is a trap
 > .... this is a ladder to go down
 < .... this is a ladder to go up
 b .... this is a burger
@@ -404,16 +404,4 @@ while Monster.zoo[0].hp > 0:
             randomX = random.randint(2,30)
             randomY = random.randint(2,8)
             randomZ = random.randint(0,1)    
-             
  
-        
-           
-            
-            
-            
-    
-             
-    
-            
-        
-
