@@ -34,17 +34,17 @@ class Guardian(Monster):
 class Boss(Monster):
     
     def init2(self):
-        self.hp = 35
+        self.hp = 70
         self.char = "B"
-        self.attack = 7
-        self.defense = 5
+        self.attack = 11
+        self.defense = 10
         
 class Player(Monster):
     
     def init2(self):
         self.hp = 100
         self.char = "@"
-        self.attack = 13
+        self.attack = 10
         self.defense = 5
         
         
@@ -53,7 +53,7 @@ class Kobolt(Monster):
     def init2(self):
         self.hp = 10
         self.char = "K" 
-        self.attack = 3
+        self.attack = 5
         self.defense = 3 
 
 class Hunter(Monster):
@@ -61,8 +61,8 @@ class Hunter(Monster):
     def init2(self):
         self.hp = 20
         self.char = "H"
-        self.attack = 6
-        self.defense = 3              
+        self.attack = 9
+        self.defense = 4              
         
 def fight(attacker, defender):
     print("----- fight starts ------")
@@ -120,6 +120,7 @@ k .... this is a key
 $ .... this is gold
 X and Y .... are teleporters
 V and v .... are random teleporters
+U .... this is an upgrade
 
 commands:
 w, a, s, d .............move
@@ -148,7 +149,7 @@ pausetext = """
 level0 = """
 ############################################
 #.>@.b....$....p....A.....#..........W.....#
-#......b.......b.............p.............#
+#......b.......b.............p............U#
 ####.....T....W..................b..####...#
 #$$#...b..T....................b....d.$#...#
 #TT###..$......b...........$........####...#
@@ -158,7 +159,7 @@ level0 = """
 #...b.B...$.##....#......$.........T..######
 #.....#######...W....#.T...b$#...b.......B.#
 #........p....b.....v..T######...###########
-####...#bb#.....b...#####.......p#bb$bb$$.Y#
+####...#bb#.....b...#####.......p#bU$bb$$.Y#
 #.$..b..##.......$..#...b...W....###########
 ############################################
 """
@@ -403,5 +404,21 @@ while Monster.zoo[0].hp > 0:
             hunger -= 50
             randomX = random.randint(2,30)
             randomY = random.randint(2,8)
-            randomZ = random.randint(0,1)    
- 
+            randomZ = random.randint(0,1)  
+     
+    if dungeon[hz][hy][hx] == "U":
+        print("You have find an attack or armor upgrade")
+        attackordefense = random.randint(1,10)
+		 
+        if attackordefense < 5:            
+            Monster.zoo[0].attack += 3
+            print("Your attack value is 3 points better! Attack value: {} ".format(Monster.zoo[0].attack))
+            dungeon[hz][hy][hx]="."
+            
+		
+        else:            
+            Monster.zoo[0].defense += 3
+            print("Your defense value is 3 points better! Defense value: {} ".format(Monster.zoo[0].defense))
+            dungeon[hz][hy][hx]="."
+	
+        
